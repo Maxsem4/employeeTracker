@@ -151,4 +151,50 @@ function addDepartmentPrompt() {
   });
 }
 
+function addRolePrompt() {
+  orm.getRoles().then(function(roles) {
+    const roleArray = [];
+    for (let i = 0; i < roles.length; i++) {
+      roleArray.push(roles[i].title);
+    }
+    orm.getDepartments().then(function(deptArray) {
+      const deptNames = [];
+      for (let i = 0; i < deptArray.length; i++) {
+        deptNames.push(deptArray[i].name);
+      }
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "Enter the name of the role you would like to add",
+            name: "title"
+          },
+          {
+            type: "input",
+            message: "Enter the annual salary of the new role",
+            name: "salary"
+          },
+          {
+            type: "list",
+            message: "Select the department in which the new role will work",
+            choices: deptNames,
+            name: "department"
+          }
+        ])
+        .then(function({ title, salary, department }) {
+          const deptId = deptArray[deptNames.indexOf(department)].id;
+          if (roleArray.includes(title)) {
+            console.log("Error - that title already exists!\n");
+            mainMenu();
+          } else {
+            orm.addRole(title, salary, deptId).then(function() {
+              console.log("\n");
+              mainMenu();
+            });
+          }
+        });
+    });
+  });
+}
+
 mainMenu();
