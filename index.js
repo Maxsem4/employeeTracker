@@ -197,4 +197,41 @@ function addRolePrompt() {
   });
 }
 
+function updateRolePrompt() {
+  orm.getEmployees().then(function(res) {
+    const empArray = [];
+    for (let i = 0; i < res.length; i++) {
+      empArray.push(res[i].name);
+    }
+    orm.getRoles().then(function(response) {
+      const roleArray = [];
+      for (let i = 0; i < response.length; i++) {
+        roleArray.push(response[i].title);
+      }
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Choose the employee whose role you'd like to update",
+            choices: empArray,
+            name: "employee"
+          },
+          {
+            type: "list",
+            message: "Select the employee's new role",
+            choices: roleArray,
+            name: "role"
+          }
+        ])
+        .then(function({ employee, role }) {
+          const empId = res[empArray.indexOf(employee)].id;
+          orm.updateRole(empId, role).then(function() {
+            console.log("\n");
+            mainMenu();
+          });
+        });
+    });
+  });
+}
+
 mainMenu();
