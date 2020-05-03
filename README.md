@@ -4,7 +4,9 @@
 
 ## Description
 
-employeeTracker in a command line app that creates a readme doc from user input.
+employeeTracker is a command line app that creates a way to track employees from user input.
+
+![Image description](./assets/schema.png)
 
 ## 🚀 How to Use?
 
@@ -22,7 +24,7 @@ Contributions, issues and feature requests are welcome.<br />
 
 ## 📝 License
 
-Copyright © 2019 [Max Semegen](https://github.com/Maxsem4).<br />
+Copyright © 2020 [Max Semegen](https://github.com/Maxsem4).<br />
 This project is [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 \_This README was generated with ❤️ by Max Semegen
