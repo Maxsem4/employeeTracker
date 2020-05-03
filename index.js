@@ -67,4 +67,62 @@ function mainMenu() {
     });
 }
 
+function addEmployeePrompt() {
+  orm.getEmployees().then(function(res) {
+    const managerArray = [];
+    for (let i = 0; i < res.length; i++) {
+      managerArray.push(res[i].name);
+    }
+    managerArray.push("none");
+    orm.getRoles().then(function(response) {
+      const roleTitleArray = [];
+      for (let i = 0; i < response.length; i++) {
+        roleTitleArray.push(response[i].title);
+      }
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "Enter employee's first name",
+            name: "firstName"
+          },
+          {
+            type: "input",
+            message: "Enter employee's last name",
+            name: "lastName"
+          },
+          {
+            type: "list",
+            message: "Select employee's role",
+            choices: roleTitleArray,
+            name: "role"
+          },
+          {
+            type: "list",
+            message: "Select employee's manager",
+            choices: managerArray,
+            name: "manager"
+          }
+        ])
+        .then(function({ firstName, lastName, role, manager }) {
+          const roleId = response[roleTitleArray.indexOf(role)].id;
+          if (manager === "none") {
+            orm.addEmployee(firstName, lastName, roleId).then(function() {
+              console.log("\n");
+              mainMenu();
+            });
+          } else {
+            const managerId = res[managerArray.indexOf(manager)].id;
+            orm
+              .addEmployee(firstName, lastName, roleId, managerId)
+              .then(function() {
+                console.log("\n");
+                mainMenu();
+              });
+          }
+        });
+    });
+  });
+}
+
 mainMenu();
