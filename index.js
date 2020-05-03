@@ -234,4 +234,43 @@ function updateRolePrompt() {
   });
 }
 
+function updateManagerPrompt() {
+  orm.getEmployees().then(function(employees) {
+    const empArray = [];
+    for (let i = 0; i < employees.length; i++) {
+      empArray.push(employees[i].name);
+    }
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Select the employee whose manager you would like to update",
+          choices: empArray,
+          name: "employee"
+        },
+        {
+          type: "list",
+          message: "Select the employee's new manager",
+          choices: empArray,
+          name: "manager"
+        }
+      ])
+      .then(function({ employee, manager }) {
+        if (employee === manager) {
+          console.log(
+            "Error - you cannot assign an employee to manage him/herself!"
+          );
+          mainMenu();
+        } else {
+          const empId = employees[empArray.indexOf(employee)].id;
+          const mgrId = employees[empArray.indexOf(manager)].id;
+          orm.updateManager(empId, mgrId).then(function() {
+            console.log("\n");
+            mainMenu();
+          });
+        }
+      });
+  });
+}
+
 mainMenu();
