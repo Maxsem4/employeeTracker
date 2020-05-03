@@ -125,4 +125,30 @@ function addEmployeePrompt() {
   });
 }
 
+function addDepartmentPrompt() {
+  orm.getDepartments().then(function(response) {
+    const deptArray = [];
+    for (let i = 0; i < response.length; i++) {
+      deptArray.push(response[i].name);
+    }
+    inquirer
+      .prompt({
+        type: "input",
+        message: "Enter the name of new department you'd like to add",
+        name: "deptName"
+      })
+      .then(function({ deptName }) {
+        if (deptArray.includes(deptName)) {
+          console.log("There is already a department with that name!\n");
+          mainMenu();
+        } else {
+          orm.addDepartment(deptName).then(function() {
+            console.log("\n");
+            mainMenu();
+          });
+        }
+      });
+  });
+}
+
 mainMenu();
