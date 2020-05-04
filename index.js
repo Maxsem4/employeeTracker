@@ -296,4 +296,73 @@ function displayByMgrPrompt() {
   });
 }
 
+function deleteEmployeePrompt() {
+  orm.getEmployees().then(function(employees) {
+    const empArray = [];
+    for (let i = 0; i < employees.length; i++) {
+      empArray.push(employees[i].name);
+    }
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which employee would you like to delete?",
+        choices: empArray,
+        name: "employee"
+      })
+      .then(function({ employee }) {
+        const empId = employees[empArray.indexOf(employee)].id;
+        orm.deleteRecord("employees", empId).then(function() {
+          console.log("\n");
+          mainMenu();
+        });
+      });
+  });
+}
+
+function deleteRolePrompt() {
+  orm.getRoles().then(function(roles) {
+    const roleArray = [];
+    for (let i = 0; i < roles.length; i++) {
+      roleArray.push(roles[i].title);
+    }
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which role would you like to delete?",
+        choices: roleArray,
+        name: "role"
+      })
+      .then(function({ role }) {
+        const roleId = roles[roleArray.indexOf(role)].id;
+        orm.deleteRecord("roles", roleId).then(function() {
+          console.log("\n");
+          mainMenu();
+        });
+      });
+  });
+}
+
+function deleteDepartmentPrompt() {
+  orm.getDepartments().then(function(depts) {
+    const deptArray = [];
+    for (let i = 0; i < depts.length; i++) {
+      deptArray.push(depts[i].name);
+    }
+    inquirer
+      .prompt({
+        type: "list",
+        message: "Which department would you like to delete?",
+        choices: deptArray,
+        name: "dept"
+      })
+      .then(function({ dept }) {
+        const deptId = depts[deptArray.indexOf(dept)].id;
+        orm.deleteRecord("departments", deptId).then(function() {
+          console.log("\n");
+          mainMenu();
+        });
+      });
+  });
+}
+
 mainMenu();
