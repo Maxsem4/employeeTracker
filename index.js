@@ -365,4 +365,28 @@ function deleteDepartmentPrompt() {
   });
 }
 
+function displayUtilizedBudgetPrompt() {
+  orm.getDepartments().then(function(depts) {
+    const deptArray = [];
+    for (let i = 0; i < depts.length; i++) {
+      deptArray.push(depts[i].name);
+    }
+    inquirer
+      .prompt({
+        type: "list",
+        message:
+          "For which department would you like to view the utilized budget?",
+        choices: deptArray,
+        name: "dept"
+      })
+      .then(function({ dept }) {
+        const deptId = depts[deptArray.indexOf(dept)].id;
+        orm.viewUtilizedBudget(deptId).then(function() {
+          console.log("\n");
+          mainMenu();
+        });
+      });
+  });
+}
+
 mainMenu();
